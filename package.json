@@ -1,0 +1,26 @@
+{
+  "name": "jquery-qbit",
+  "version": "0.0.1",
+  "description": "A jQuery plugin that provides dynamic loading of Javascript and HTML bits into a web page.",
+  "main": "src/qbit.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bnielsen1965/qbit.git"
+  },
+  "keywords": [
+    "jquery-plugin",
+    "ecosystem:jquery"
+  ],
+  "author": "Bryan Nielsen <bnielsen1965@gmail.com> (https://github.com/bnielsen1965)",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/bnielsen1965/qbit/issues"
+  },
+  "homepage": "https://github.com/bnielsen1965/qbit#readme"
+}
