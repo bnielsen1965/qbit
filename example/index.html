@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Qbit jQuery Plugin</title>
+  <meta name="description" content="Qbit jQuery Plugin">
+  <meta name="author" content="Bryan Nielsen">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+
+<body>
+  <div>
+    <b>Qbit Plugin Example:</b> Loads three Qbits, a simple example that
+    loads some HTML, a timezone select input linked to a time output element,
+    and a time output bit.
+  </div>
+  <div><span class="example"></span><span class="example"></span><span class="example"></span></div>
+  <div id="tz_input"></div>
+  <div id="time_output"></div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="../src/qbit.js"></script>
+  <script>
+
+$(document).ready(function () {
+  $('.example').qbit('example');
+  $('#tz_input').qbit('tzselect', { select: "America/New_York", timeElement: $('#time_output')[0] });
+  $('#time_output').qbit({ qbit: 'time' }, { timeZone: "America/New_York" });
+});
+
+  </script>
+</body>
+</html>
