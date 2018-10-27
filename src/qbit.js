@@ -94,6 +94,7 @@
 
     // process the queue qbits
     runQueue: function () {
+      var _this = this;
       queueRunning = true;
       var doneList = [];
       // process each queued qbit
@@ -116,7 +117,10 @@
       });
       if (queue.length) {
         // continue if qbits waiting in queue
-        setTimeout(this.runQueue, 50);
+        setTimeout(function () { _this.runQueue(); }, 50);
+      }
+      else {
+        queueRunning = false;
       }
     },
 
