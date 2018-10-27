@@ -70,7 +70,7 @@
         return;
       }
       qbits[name] = false; // prevent additional loads
-      $.getScript(this.settings.path + name + '/index.js', function() {
+      $.getScript(this.getQbitPath().replace(/\/$/, '') + '/' + name + '/index.js', function() {
   			// load complete
   		})
   		.fail(function (jqxhr, settings, exception) {
@@ -125,7 +125,7 @@
     },
 
     loadHTML: function (callback) {
-      $(this.element).load(this.getQbitPath() + '/' + this.qbitName + '/' + 'index.html' , function() {
+      $(this.element).load(this.getQbitPath().replace(/\/$/, '') + '/' + this.qbitName + '/index.html' , function() {
         if (callback) {
           callback();
         }
