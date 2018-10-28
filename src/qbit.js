@@ -45,10 +45,6 @@
     this._name = pluginName;
     this.args = comArgs; // qbit arguments
     this.init();
-    this.queueQbit(this.settings.qbit, this.element);
-    if (this.settings.qbit && !qbits[this.settings.qbit]) {
-      this.loadQbit(this.settings.qbit);
-    }
   }
 
   // Avoid Plugin.prototype conflicts
@@ -138,7 +134,10 @@
   function PluginWrapper(options, comArgs) {
     return this.each(function () {
       if (!$.data(this, "plugin_" + pluginName)) {
-        $.data(this, "plugin_" + pluginName, new Plugin(this, options, comArgs));
+        var newQbit = new Plugin(this, options, comArgs);
+        $.data(this, "plugin_" + pluginName, newQbit);
+        newQbit.queueQbit(newQbit.settings.qbit, newQbit.element);
+        newQbit.loadQbit(newQbit.settings.qbit);
       }
     });
   }
