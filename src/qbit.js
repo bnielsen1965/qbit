@@ -55,10 +55,12 @@
     },
 
     destroy: function () {
-      // qbit may have a destroy method from consumer or the abit itself
-      if (this.args.destroy) {
-        this.args.destroy();
+      // check qbit for a destroy method
+      var qbit = $.data(this.element, "qbit_" + this.settings.qbit);
+      if (qbit.destroy) {
+        qbit.destroy();
       }
+      qbit = null;
       // remove the qbit from the element
       $.removeData(this.element, "qbit_" + this.settings.qbit);
     },
