@@ -25,6 +25,7 @@
 
   // Create the defaults once
   var pluginName = "qbit";
+  var pluginDataName = "plugin_" + pluginName;
   var defaults = {
     path: 'qbits/'
   };
@@ -54,15 +55,30 @@
 
     },
 
+    // destroy the qbit for ths plugin instance
     destroy: function () {
-      // check qbit for a destroy method
-      var qbit = $.data(this.element, "qbit_" + this.settings.qbit);
-      if (qbit.destroy) {
+      var qbit = this.getQbit();
+      if (qbit && qbit.destroy) {
         qbit.destroy();
       }
       qbit = null;
       // remove the qbit from the element
       $.removeData(this.element, "qbit_" + this.settings.qbit);
+    },
+
+    // get the qbit instance for this plugin instance
+    getQbit: function () {
+      var data = $(this.element).data();
+      if (!data) {
+        return null;
+      }
+      var keys = Object.keys(data);
+      for (var ki = 0; ki < keys.length; ki++) {
+        if (/^qbit_.+/.test(keys[ki])) {
+          return data[keys[ki]];
+        }
+      }
+      return null;
     },
 
     getQbitPath: function () {
@@ -110,7 +126,7 @@
           // qbit ready to run
           doneList.push(i);
           // get a reference to the jquery qbit plugin instance
-          var jqbit = $.data(c.element, "plugin_" + pluginName);
+          var jqbit = $.data(c.element, pluginDataName);
           // add qbit to element and call constructor with element and jquery qbits instance
           $.data(c.element, "qbit_" + c.name, new qbits[c.name](c.element, jqbit));
         }
@@ -128,6 +144,7 @@
       }
     },
 
+    // load the HTML file associated with the qbit
     loadHTML: function (callback) {
       $(this.element).load(this.getQbitPath().replace(/\/$/, '') + '/' + this.settings.qbit + '/index.html' , function() {
         if (callback) {
@@ -140,20 +157,26 @@
   // A really lightweight plugin wrapper around the constructor,
   // preventing against multiple instantiations
   function PluginWrapper(options, comArgs) {
-    return this.each(function () {
-      // if element already has a qbit then destroy
-      var oldPlugin = $.data(this, "plugin_" + pluginName);
-      if (oldPlugin) {
-        oldPlugin.destroy();
-        $.removeData(this, "plugin_" + pluginName);
-      }
+    if (this.length === 1 && !options && !comArgs) {
+      // requested the plugin instance for this element
+      return $(this).data(pluginDataName);
+    }
+    else {
+      return this.each(function () {
+        // if element already has a qbit then destroy
+        var oldPlugin = $.data(this, pluginDataName);
+        if (oldPlugin) {
+          oldPlugin.destroy();
+          $.removeData(this, pluginDataName);
+        }
 
-      // add jquery qbit plugin instance to element
-      var newPlugin = new Plugin(this, options, comArgs);
-      $.data(this, "plugin_" + pluginName, newPlugin);
-      newPlugin.queueQbit(newPlugin.settings.qbit, newPlugin.element);
-      newPlugin.loadQbit(newPlugin.settings.qbit);
-    });
+        // add jquery qbit plugin instance to element
+        var newPlugin = new Plugin(this, options, comArgs);
+        $.data(this, pluginDataName, newPlugin);
+        newPlugin.queueQbit(newPlugin.settings.qbit, newPlugin.element);
+        newPlugin.loadQbit(newPlugin.settings.qbit);
+      });
+    }
   }
 
   // extend wrapper methods
@@ -167,10 +190,6 @@
       else {
         qbits[name] = qbit;
       }
-    },
-
-    getElementQbit: function(element, qbit) {
-      return $.data(element, 'qbit_' + qbit);
     }
 
   });
